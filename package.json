@@ -1,6 +1,6 @@
 {
   "name": "@cobuildlab/8base-utils",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "This is package to deal with common scenarios working with 8base platform",
   "main": "lib/index.js",
   "types": "./lib/index.d.ts",
@@ -8,8 +8,7 @@
     "test": "jest --collect-coverage",
     "build": "tsc",
     "format": "prettier --write \"src/**/*.ts\" \"src/**/*.js\"",
-    "lint": "tslint -p tsconfig.json",
-    "prepublishOnly": "npm run format && npm run lint && npm run build"
+    "lint": "tslint -p tsconfig.json"
   },
   "files": [
     "lib/**/*"
