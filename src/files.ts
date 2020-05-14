@@ -1,5 +1,11 @@
-import {isNullOrUndefined} from "@cobuildlab/validation-utils";
-import {_validateFile, _validateFiles, _validateNullOrUndefinedOrBlank, _validateReference} from "./utils";
+import { isNullOrUndefined } from "@cobuildlab/validation-utils";
+import {
+  _validateFile,
+  _validateFiles,
+  _validateNullOrUndefinedOrBlank,
+  _validateReference,
+  _validateReferences
+} from "./utils";
 
 
 /**
@@ -12,20 +18,20 @@ import {_validateFile, _validateFiles, _validateNullOrUndefinedOrBlank, _validat
  * @param {string} key - The key in the Object.
  */
 export const normalize8baseDocumentCreate = (
-    data: Record<string, any>,
-    key: string,
+  data: Record<string, any>,
+  key: string
 ) => {
-    _validateNullOrUndefinedOrBlank(key, 'normalize8baseDocumentCreate:key');
+  _validateNullOrUndefinedOrBlank(key, "normalize8baseDocumentCreate:key");
 
-    const currentValue = data[key];
-    if (isNullOrUndefined(currentValue)) {
-        delete data[key];
-        return;
-    }
+  const currentValue = data[key];
+  if (isNullOrUndefined(currentValue)) {
+    delete data[key];
+    return;
+  }
 
-    _validateFile(currentValue, "normalize8baseDocumentCreate:currentValue");
-    data[key] = {create: {fileId: currentValue.fileId}};
-}
+  _validateFile(currentValue, "normalize8baseDocumentCreate:currentValue");
+  data[key] = { create: { fileId: currentValue.fileId } };
+};
 
 
 /**
@@ -37,32 +43,32 @@ export const normalize8baseDocumentCreate = (
  * @param {string} key - The key in the Object.
  */
 export const normalize8baseDocumentsCreate = (
-    data: Record<string, any>,
-    key: string,
+  data: Record<string, any>,
+  key: string
 ) => {
-    _validateNullOrUndefinedOrBlank(key, 'normalize8baseDocumentsCreate:key');
+  _validateNullOrUndefinedOrBlank(key, "normalize8baseDocumentsCreate:key");
 
-    const currentValues = data[key];
-    if (isNullOrUndefined(currentValues)) {
-        delete data[key];
-        return;
-    }
+  const currentValues = data[key];
+  if (isNullOrUndefined(currentValues)) {
+    delete data[key];
+    return;
+  }
 
-    _validateFiles(currentValues, "normalize8baseDocumentsCreate:currentValues");
+  _validateFiles(currentValues, "normalize8baseDocumentsCreate:currentValues");
 
-    if (currentValues.length === 0) {
-        delete data[key];
-        return;
-    }
+  if (currentValues.length === 0) {
+    delete data[key];
+    return;
+  }
 
-    const documents: Record<string, any>[] = [];
-    for (const file of currentValues) {
-        _validateFile(file, 'normalize8baseDocumentsCreate:file.fileId');
-        documents.push({fileId: file.fileId});
-    }
+  const documents: Record<string, any>[] = [];
+  for (const file of currentValues) {
+    _validateFile(file, "normalize8baseDocumentsCreate:file.fileId");
+    documents.push({ fileId: file.fileId });
+  }
 
-    data[key] = {create: documents};
-}
+  data[key] = { create: documents };
+};
 
 
 /**
@@ -74,30 +80,30 @@ export const normalize8baseDocumentsCreate = (
  * @param {object}originalData - Original object.
  */
 export const normalize8baseDocumentDeleteAndUpdate = (data: Record<string, any>,
-                                                      key: string, originalData: Record<string, any>,) => {
-    _validateNullOrUndefinedOrBlank(key, 'normalize8baseDocumentDeleteAndUpdate:key');
+                                                      key: string, originalData: Record<string, any>) => {
+  _validateNullOrUndefinedOrBlank(key, "normalize8baseDocumentDeleteAndUpdate:key");
 
-    const newFile = data[key];
-    const oldFile = originalData[key];
+  const newFile = data[key];
+  const oldFile = originalData[key];
 
-    if (isNullOrUndefined(newFile)) {
-        if (isNullOrUndefined(oldFile)) {
-            delete data[key];
-        } else {
-            _validateReference(oldFile, 'normalize8baseDocumentDeleteAndUpdate:oldFile');
-            data[key] = {disconnect: {id: oldFile.id}};
-        }
-        return;
+  if (isNullOrUndefined(newFile)) {
+    if (isNullOrUndefined(oldFile)) {
+      delete data[key];
+    } else {
+      _validateReference(oldFile, "normalize8baseDocumentDeleteAndUpdate:oldFile");
+      data[key] = { disconnect: { id: oldFile.id } };
     }
+    return;
+  }
 
-    _validateFile(newFile, 'normalize8baseDocumentDeleteAndUpdate:newFile');
+  _validateFile(newFile, "normalize8baseDocumentDeleteAndUpdate:newFile");
 
-    if (isNullOrUndefined(newFile.id)) {
-        data[key] = {create: {fileId: newFile.fileId}};
-        return;
-    }
+  if (isNullOrUndefined(newFile.id)) {
+    data[key] = { create: { fileId: newFile.fileId } };
+    return;
+  }
 
-    delete data[key];
+  delete data[key];
 };
 
 
@@ -111,56 +117,60 @@ export const normalize8baseDocumentDeleteAndUpdate = (data: Record<string, any>,
  */
 export const normalize8BaseDocumentsDeleteAndUpdate = (data: Record<string, any>, key: string, originalData: Record<string, any>) => {
 
-    _validateNullOrUndefinedOrBlank(key, 'normalize8BaseDocumentsDeleteAndUpdate:key');
+  _validateNullOrUndefinedOrBlank(key, "normalize8BaseDocumentsDeleteAndUpdate:key");
 
-    const newFiles = data[key];
-    const oldFiles = originalData[key];
+  const newFiles = data[key];
+  const oldFiles = originalData[key];
 
-    if (isNullOrUndefined(newFiles)) {
-        if (isNullOrUndefined(oldFiles)) {
-            delete data[key];
-        } else {
-            _validateFiles(oldFiles, "normalize8BaseDocumentsDeleteAndUpdate:oldFiles");
-            data[key] = {
-                disconnect: oldFiles.map((file: Record<string, string>) => {
-                    return {fileId: file.fileId}
-                })
-            };
-        }
-        return;
-    }
-
-    _validateFiles(newFiles, "normalize8BaseDocumentsDeleteAndUpdate:newFiles");
-    _validateFiles(oldFiles, "normalize8BaseDocumentsDeleteAndUpdate:oldFiles");
-
-    const toBeDeleted: Record<string, string>[] = [];
-    const toBeCreated: Record<string, string>[] = [];
-
-    newFiles.forEach((file: Record<string, string>) => {
-        if (file.id === undefined)
-            toBeCreated.push(file);
-    });
-
-    oldFiles.forEach((oldFile: Record<string, string>) => {
-        for (const newFile of newFiles) {
-            if (newFile.id === oldFile.id)
-                return;
-        }
-        toBeDeleted.push(oldFile);
-    });
-
-    if (toBeCreated.length === 0 && toBeDeleted.length === 0) {
+  if (isNullOrUndefined(newFiles)) {
+    if (isNullOrUndefined(oldFiles)) {
+      delete data[key];
+    } else {
+      _validateReferences(oldFiles, "normalize8BaseDocumentsDeleteAndUpdate:oldFiles");
+      if (oldFiles.length === 0)
         delete data[key];
+      else
+        data[key] = {
+          disconnect: oldFiles.map((file: Record<string, string>) => {
+            return { id: file.id };
+          })
+        };
+    }
+    return;
+  }
+
+  _validateFiles(newFiles, "normalize8BaseDocumentsDeleteAndUpdate:newFiles");
+  _validateReferences(oldFiles, "normalize8BaseDocumentsDeleteAndUpdate:oldFiles");
+
+  const toBeDeleted: Record<string, string>[] = [];
+  const toBeCreated: Record<string, string>[] = [];
+
+  newFiles.forEach((file: Record<string, string>) => {
+    if (file.id === undefined)
+      toBeCreated.push(file);
+  });
+
+  oldFiles.forEach((oldFile: Record<string, string>) => {
+    for (const newFile of newFiles) {
+      if (newFile.id === oldFile.id)
         return;
     }
+    toBeDeleted.push(oldFile);
+  });
 
-    data[key] = {};
-    if (toBeCreated.length > 0)
-        data[key].create = toBeCreated.map(file => {
-            return {fileId: file.fileId};
-        });
-    if (toBeDeleted.length > 0)
-        data[key].disconnect = toBeDeleted.map(file => {
-            return {id: file.id};
-        });
+  if (toBeCreated.length === 0 && toBeDeleted.length === 0) {
+    delete data[key];
+    return;
+  }
+
+  data[key] = {};
+  if (toBeCreated.length > 0)
+    data[key].create = toBeCreated.map(file => {
+      return { fileId: file.fileId };
+    });
+  if (toBeDeleted.length > 0)
+    data[key].disconnect = toBeDeleted.map(file => {
+      return { id: file.id };
+    });
+
 };
