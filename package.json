@@ -1,6 +1,6 @@
 {
   "name": "@cobuildlab/8base-utils",
-  "version": "0.0.5",
+  "version": "0.1.0",
   "description": "This is package to deal with common scenarios working with 8base platform",
   "main": "lib/index.js",
   "types": "./lib/index.d.ts",
@@ -53,5 +53,8 @@
       "tslint -p tsconfig.json --fix",
       "git add"
     ]
+  },
+  "dependencies": {
+    "@cobuildlab/validation-utils": "0.0.2"
   }
 }
