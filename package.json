@@ -1,6 +1,6 @@
 {
   "name": "@cobuildlab/8base-utils",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "This is package to deal with common scenarios working with 8base platform",
   "main": "lib/index.js",
   "types": "./lib/index.d.ts",
