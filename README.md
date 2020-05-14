@@ -15,6 +15,7 @@ This is a package for functions that are use full in common cases of working wit
 ### `normalize8BaseReference(data, key)`
 
 - Updates an object to change a property with a 8base `connect` operation.
+- If the value of the key is undefined or null, the property gets deleted from the object.
 - This function mutates the data object to reflect the change.
 - This function assumes that all 8base IDs are of type string.
 
@@ -36,6 +37,7 @@ console.log(issue);
 ### `normalize8baseDocumentCreate(data, key)`
 
 - Updates an object to change a property with a 8base `create` operation.
+- If the value of the key is undefined or null, the property gets deleted from the object.
 - This function mutates the data object to reflect the change.
 
 Example:
@@ -57,6 +59,7 @@ console.log(issue);
 ### `normalize8baseDocumentsCreate(data, key)`
 
 - Updates an object to change a property with a 8base `create` operation.
+- If the value of the key is undefined, null, or an empty array, the property gets deleted from the object.
 - This function mutates the data object to reflect the change.
 
 Example:

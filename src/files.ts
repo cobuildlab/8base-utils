@@ -1,26 +1,13 @@
-import {ValidationError} from './error/ValidationError';
 import {isNullOrUndefined} from "@cobuildlab/validation-utils";
-import {_validateNullOrUndefinedOrBlank} from "./utils";
-
-
-const _validateFile = (file: any, errorPrefix: string) => {
-    if (typeof file !== 'object' || isNullOrUndefined(file.fileId))
-        throw new ValidationError(`${errorPrefix}: object is not a valid file as it doesn't contain a valid fileId property.`);
-}
-
-const _validateFiles = (files: any, errorPrefix: string) => {
-    if (!Array.isArray(files))
-        throw new ValidationError(`${errorPrefix}: object is not a List.`);
-    for (const file of files)
-        _validateFile(file, errorPrefix);
-}
+import {_validateFile, _validateFiles, _validateNullOrUndefinedOrBlank, _validateReference} from "./utils";
 
 
 /**
  * Helper to change non null keys to 8base 'create' reference for files.
- *
+ * If the value of the key is undefined or null, the property gets deleted from the object.
  * WARNING: This function mutates the data.
- * WARNING: This functions assumes that all 8base keys are strings
+ * WARNING: This functions assumes that all 8base keys are strings.
+ *
  * @param {object} data - The Object to be Mutated.
  * @param {string} key - The key in the Object.
  */
@@ -90,22 +77,23 @@ export const normalize8baseDocumentDeleteAndUpdate = (data: Record<string, any>,
                                                       key: string, originalData: Record<string, any>,) => {
     _validateNullOrUndefinedOrBlank(key, 'normalize8baseDocumentDeleteAndUpdate:key');
 
-    const newValue = data[key];
-    const oldValue = originalData[key];
+    const newFile = data[key];
+    const oldFile = originalData[key];
 
-    if (isNullOrUndefined(newValue)) {
-        if (isNullOrUndefined(oldValue)) {
+    if (isNullOrUndefined(newFile)) {
+        if (isNullOrUndefined(oldFile)) {
             delete data[key];
         } else {
-            data[key] = {disconnect: {id: oldValue.id}};
+            _validateReference(oldFile, 'normalize8baseDocumentDeleteAndUpdate:oldFile');
+            data[key] = {disconnect: {id: oldFile.id}};
         }
         return;
     }
 
-    _validateFile(newValue, 'normalize8baseDocumentDeleteAndUpdate:newValue');
+    _validateFile(newFile, 'normalize8baseDocumentDeleteAndUpdate:newFile');
 
-    if (isNullOrUndefined(newValue.id)) {
-        data[key] = {create: {fileId: newValue.fileId}};
+    if (isNullOrUndefined(newFile.id)) {
+        data[key] = {create: {fileId: newFile.fileId}};
         return;
     }
 

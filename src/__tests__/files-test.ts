@@ -1,4 +1,8 @@
-import {normalize8baseDocumentCreate, normalize8baseDocumentsCreate} from '../files';
+import {
+    normalize8baseDocumentCreate,
+    normalize8baseDocumentDeleteAndUpdate,
+    normalize8baseDocumentsCreate
+} from '../files';
 import {ValidationError} from '../error/ValidationError';
 
 
@@ -98,5 +102,68 @@ test('normalize8baseDocumentsCreate:', () => {
     const o9 = {a: [{fileId: '<ID1>'}, {fileId: '<ID2>'}]};
     normalize8baseDocumentsCreate(o9, 'a');
     expect(o9).toMatchObject({a: {create: [{fileId: '<ID1>'}, {fileId: '<ID2>'}]}});
+
+});
+
+
+test('normalize8baseDocumentDeleteAndUpdate:', () => {
+    expect(() => normalize8baseDocumentDeleteAndUpdate({}, '', {})).toThrowError(
+        new ValidationError(`normalize8baseDocumentDeleteAndUpdate:key: value: can't be blank, null or undefined.`),
+    );
+
+    const newO1 = {a: null};
+    const oldO1 = {a: null};
+    normalize8baseDocumentDeleteAndUpdate(newO1, 'a', oldO1);
+    expect(newO1).toMatchObject({});
+
+    const newO2 = {a: undefined};
+    const oldO2 = {a: undefined};
+    normalize8baseDocumentDeleteAndUpdate(newO2, 'a', oldO2);
+    expect(newO2).toMatchObject({});
+
+    const newO3 = {a: null};
+    const oldO3 = {a: 1};
+    expect(() => normalize8baseDocumentDeleteAndUpdate(newO3, 'a', oldO3)).toThrowError(
+        new ValidationError(
+            `normalize8baseDocumentDeleteAndUpdate:oldFile: object is not a valid reference as it doesn't contain a valid id property.`,
+        ),
+    );
+
+    const newO4 = {a: null};
+    const oldO4 = {a: "1"};
+    expect(() => normalize8baseDocumentDeleteAndUpdate(newO4, 'a', oldO4)).toThrowError(
+        new ValidationError(
+            `normalize8baseDocumentDeleteAndUpdate:oldFile: object is not a valid reference as it doesn't contain a valid id property.`,
+        ),
+    );
+
+    const newO5 = {a: null};
+    const oldO5 = {a: {}};
+    expect(() => normalize8baseDocumentDeleteAndUpdate(newO5, 'a', oldO5)).toThrowError(
+        new ValidationError(
+            `normalize8baseDocumentDeleteAndUpdate:oldFile: object is not a valid reference as it doesn't contain a valid id property.`,
+        ),
+    );
+
+    const newO6 = {a: null};
+    const oldO6 = {a: {id: null}};
+    expect(() => normalize8baseDocumentDeleteAndUpdate(newO6, 'a', oldO6)).toThrowError(
+        new ValidationError(
+            `normalize8baseDocumentDeleteAndUpdate:oldFile: object is not a valid reference as it doesn't contain a valid id property.`,
+        ),
+    );
+
+    const newO7 = {a: null};
+    const oldO7 = {a: {id: undefined}};
+    expect(() => normalize8baseDocumentDeleteAndUpdate(newO7, 'a', oldO7)).toThrowError(
+        new ValidationError(
+            `normalize8baseDocumentDeleteAndUpdate:oldFile: object is not a valid reference as it doesn't contain a valid id property.`,
+        ),
+    );
+
+    const newO8 = {a: null};
+    const oldO8 = {a: {id: "FILE-ID"}};
+    normalize8baseDocumentDeleteAndUpdate(newO8, 'a', oldO8);
+    expect(newO8).toMatchObject({a: {disconnect: {id: "FILE-ID"}}});
 
 });
