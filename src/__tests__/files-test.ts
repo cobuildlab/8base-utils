@@ -22,14 +22,14 @@ test("normalize8baseDocumentCreate:", () => {
   const o3 = { a: 1 };
   expect(() => normalize8baseDocumentCreate(o3, "a")).toThrowError(
     new ValidationError(
-      `normalize8baseDocumentCreate:currentValue: object is not a valid file as it doesn't contain a valid fileId property.`
+      `normalize8baseDocumentCreate:currentValue: file is not a valid object.`
     )
   );
 
   const o4 = { a: "something" };
   expect(() => normalize8baseDocumentCreate(o4, "a")).toThrowError(
     new ValidationError(
-      `normalize8baseDocumentCreate:currentValue: object is not a valid file as it doesn't contain a valid fileId property.`
+      `normalize8baseDocumentCreate:currentValue: file is not a valid object.`
     )
   );
 
@@ -48,8 +48,15 @@ test("normalize8baseDocumentCreate:", () => {
   );
 
   const o7 = { a: { fileId: "<ID>" } };
-  normalize8baseDocumentCreate(o7, "a");
-  expect(o7).toEqual({ a: { create: { fileId: "<ID>" } } });
+  expect(() => normalize8baseDocumentCreate(o7, "a")).toThrowError(
+    new ValidationError(
+      `normalize8baseDocumentCreate:currentValue: object is not a valid file as it doesn't contain a valid filename property.`
+    )
+  );
+
+  const o8 = { a: { fileId: "<ID>", filename: "<FILENAME>" } };
+  normalize8baseDocumentCreate(o8, "a");
+  expect(o8).toEqual({ a: { create: { fileId: "<ID>", filename: "<FILENAME>" } } });
 
 });
 
@@ -95,23 +102,34 @@ test("normalize8baseDocumentsCreate:", () => {
     new ValidationError(`normalize8baseDocumentsCreate:currentValues: object is not a List.`)
   );
 
-  const o8 = { a: [{ fileId: "<ID>" }] };
+  const o8 = { a: [{ fileId: "<ID>", filename: "<FILENAME>" }] };
   normalize8baseDocumentsCreate(o8, "a");
-  expect(o8).toEqual({ a: { create: [{ fileId: "<ID>" }] } });
+  expect(o8).toEqual({ a: { create: [{ fileId: "<ID>", filename: "<FILENAME>" }] } });
 
-  const o9 = { a: [{ fileId: "<ID1>" }, { fileId: "<ID2>" }] };
+  const o9 = { a: [{ fileId: "<ID1>", filename: "<FILENAME1>" }, { fileId: "<ID2>", filename: "<FILENAME2>" }] };
   normalize8baseDocumentsCreate(o9, "a");
-  expect(o9).toEqual({ a: { create: [{ fileId: "<ID1>" }, { fileId: "<ID2>" }] } });
+  expect(o9).toEqual({
+    a: {
+      create: [{ fileId: "<ID1>", filename: "<FILENAME1>" }, {
+        fileId: "<ID2>",
+        filename: "<FILENAME2>"
+      }]
+    }
+  });
+
+  const o10 = { a: [{ fileId: "<ID>" }] };
+  expect(() => normalize8baseDocumentsCreate(o10, "a")).toThrowError(
+    new ValidationError(`normalize8baseDocumentsCreate:currentValues: object is not a valid file as it doesn't contain a valid filename property.`)
+  );
 
 });
-
 
 test("normalize8baseDocumentDeleteAndUpdate:", () => {
   expect(() => normalize8baseDocumentDeleteAndUpdate({}, "", {})).toThrowError(
     new ValidationError(`normalize8baseDocumentDeleteAndUpdate:key: value: can't be blank, null or undefined.`)
   );
 
-  const newO0 = { a: { id: "ID", fileId: "fileID" } };
+  const newO0 = { a: { id: "ID", fileId: "fileID", filename: "<FILENAME>" } };
   const oldO0 = { a: null };
   normalize8baseDocumentDeleteAndUpdate(newO0, "a", oldO0);
   expect(newO0).toEqual({});
@@ -195,10 +213,16 @@ test("normalize8baseDocumentDeleteAndUpdate:", () => {
     )
   );
 
-  const new12 = { a: { fileId: "FILE-ID1" } };
+  const new12 = { a: { fileId: "FILE-ID1", filename: "<FILENAME>" } };
   const old12 = {};
   normalize8baseDocumentDeleteAndUpdate(new12, "a", old12);
-  expect(new12).toEqual({ a: { create: { fileId: "FILE-ID1" } } });
+  expect(new12).toEqual({ a: { create: { fileId: "FILE-ID1", filename: "<FILENAME>" } } });
+
+  const new13 = { a: { fileId: "FILE-ID1" } };
+  const old13 = {};
+  expect(() => normalize8baseDocumentDeleteAndUpdate(new13, "a", old13)).toThrowError(
+    new ValidationError(`normalize8baseDocumentDeleteAndUpdate:newFile: object is not a valid file as it doesn't contain a valid filename property.`)
+  );
 
 });
 
@@ -301,15 +325,36 @@ test("normalize8BaseDocumentsDeleteAndUpdate:", () => {
   normalize8BaseDocumentsDeleteAndUpdate(new13, "a", old13);
   expect(new13).toEqual({ a: { disconnect: [{ id: "ID" }] } });
 
-  const new14 = { a: [{ fileId: "FILE-ID1" }] };
+  const new14 = { a: [{ fileId: "FILE-ID1", filename: "<FILENAME>" }] };
   const old14 = { a: [{ id: "FILE-ID2" }] };
   normalize8BaseDocumentsDeleteAndUpdate(new14, "a", old14);
-  expect(new14).toEqual({ a: { create: [{ fileId: "FILE-ID1" }], disconnect: [{ id: "FILE-ID2" }] } });
+  expect(new14).toEqual({
+    a: {
+      create: [{ fileId: "FILE-ID1", filename: "<FILENAME>" }],
+      disconnect: [{ id: "FILE-ID2" }]
+    }
+  });
 
-
-  const new15 = { a: [{ fileId: "FILE-ID1" }, { id: "ID2", fileId: "FILE-ID2" }] };
+  const new15 = {
+    a: [{ fileId: "FILE-ID1", filename: "<FILENAME1>" }, {
+      id: "ID2",
+      fileId: "FILE-ID2",
+      filename: "<FILENAME2>"
+    }]
+  };
   const old15 = { a: [{ id: "FILE-ID2" }, { id: "ID2" }] };
   normalize8BaseDocumentsDeleteAndUpdate(new15, "a", old15);
-  expect(new15).toEqual({ a: { create: [{ fileId: "FILE-ID1" }], disconnect: [{ id: "FILE-ID2" }] } });
+  expect(new15).toEqual({
+    a: {
+      create: [{ fileId: "FILE-ID1", filename: "<FILENAME1>" }],
+      disconnect: [{ id: "FILE-ID2" }]
+    }
+  });
+
+  const new16 = { a: [{ fileId: "FILE-ID1" }, { id: "ID2", fileId: "FILE-ID2", filename: "<FILENAME2>" }] };
+  const old16 = { a: [{ id: "FILE-ID2" }, { id: "ID2" }] };
+  expect(() => normalize8BaseDocumentsDeleteAndUpdate(new16, "a", old16)).toThrowError(
+    new ValidationError(`normalize8BaseDocumentsDeleteAndUpdate:newFiles: object is not a valid file as it doesn't contain a valid filename property.`)
+  );
 
 });
