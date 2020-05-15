@@ -198,7 +198,7 @@ test("normalize8baseDocumentDeleteAndUpdate:", () => {
   const new12 = { a: { fileId: "FILE-ID1" , filename:'filename'} };
   const old12 = {};
   normalize8baseDocumentDeleteAndUpdate(new12, "a", old12);
-  expect(new12).toEqual({ a: { create: { fileId: "FILE-ID1" } } });
+  expect(new12).toEqual({ a: { create: { fileId: "FILE-ID1" , filename:'filename'} } });
 
 });
 
@@ -304,12 +304,12 @@ test("normalize8BaseDocumentsDeleteAndUpdate:", () => {
   const new14 = { a: [{ fileId: "FILE-ID1" , filename:'filename' }] };
   const old14 = { a: [{ id: "FILE-ID2" }] };
   normalize8BaseDocumentsDeleteAndUpdate(new14, "a", old14);
-  expect(new14).toEqual({ a: { create: [{ fileId: "FILE-ID1" }], disconnect: [{ id: "FILE-ID2" }] } });
+  expect(new14).toEqual({ a: { create: [{ fileId: "FILE-ID1" , filename:'filename'}], disconnect: [{ id: "FILE-ID2" }] } });
 
 
   const new15 = { a: [{ fileId: "FILE-ID1" , filename:'filename'  }, { id: "ID2", fileId: "FILE-ID2" , filename:'filename' }] };
   const old15 = { a: [{ id: "FILE-ID2" }, { id: "ID2" }] };
   normalize8BaseDocumentsDeleteAndUpdate(new15, "a", old15);
-  expect(new15).toEqual({ a: { create: [{ fileId: "FILE-ID1" }], disconnect: [{ id: "FILE-ID2" }] } });
+  expect(new15).toEqual({ a: { create: [{ fileId: "FILE-ID1" , filename:'filename'}], disconnect: [{ id: "FILE-ID2" }] } });
 
 });
