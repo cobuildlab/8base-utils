@@ -30,7 +30,7 @@ export const normalize8baseDocumentCreate = (
   }
 
   _validateFile(currentValue, "normalize8baseDocumentCreate:currentValue");
-  data[key] = { create: { fileId: currentValue.fileId } };
+  data[key] = { create: { fileId: currentValue.fileId , filename: currentValue.filename } };
 };
 
 
@@ -64,7 +64,7 @@ export const normalize8baseDocumentsCreate = (
   const documents: Record<string, any>[] = [];
   for (const file of currentValues) {
     _validateFile(file, "normalize8baseDocumentsCreate:file.fileId");
-    documents.push({ fileId: file.fileId });
+    documents.push({ fileId: file.fileId , filename: file.filename});
   }
 
   data[key] = { create: documents };
@@ -99,7 +99,7 @@ export const normalize8baseDocumentDeleteAndUpdate = (data: Record<string, any>,
   _validateFile(newFile, "normalize8baseDocumentDeleteAndUpdate:newFile");
 
   if (isNullOrUndefined(newFile.id)) {
-    data[key] = { create: { fileId: newFile.fileId } };
+    data[key] = { create: { fileId: newFile.fileId , filename: newFile.filename} };
     return;
   }
 
@@ -166,7 +166,7 @@ export const normalize8BaseDocumentsDeleteAndUpdate = (data: Record<string, any>
   data[key] = {};
   if (toBeCreated.length > 0)
     data[key].create = toBeCreated.map(file => {
-      return { fileId: file.fileId };
+      return { fileId: file.fileId , filename: file.filename};
     });
   if (toBeDeleted.length > 0)
     data[key].disconnect = toBeDeleted.map(file => {
