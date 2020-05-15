@@ -115,9 +115,9 @@ export const normalize8baseDocumentDeleteAndUpdate = (data: Record<string, any>,
  * @param {string} key - The key of the property to mutate.
  * @param {Array} originalData - The documents originals.
  */
-export const normalize8BaseDocumentsDeleteAndUpdate = (data: Record<string, any>, key: string, originalData: Record<string, any>) => {
+export const normalize8baseDocumentsDeleteAndUpdate = (data: Record<string, any>, key: string, originalData: Record<string, any>) => {
 
-  _validateNullOrUndefinedOrBlank(key, "normalize8BaseDocumentsDeleteAndUpdate:key");
+  _validateNullOrUndefinedOrBlank(key, "normalize8baseDocumentsDeleteAndUpdate:key");
 
   const newFiles = data[key];
   const oldFiles = originalData[key];
@@ -126,7 +126,7 @@ export const normalize8BaseDocumentsDeleteAndUpdate = (data: Record<string, any>
     if (isNullOrUndefined(oldFiles)) {
       delete data[key];
     } else {
-      _validateReferences(oldFiles, "normalize8BaseDocumentsDeleteAndUpdate:oldFiles");
+      _validateReferences(oldFiles, "normalize8baseDocumentsDeleteAndUpdate:oldFiles");
       if (oldFiles.length === 0)
         delete data[key];
       else
@@ -139,8 +139,8 @@ export const normalize8BaseDocumentsDeleteAndUpdate = (data: Record<string, any>
     return;
   }
 
-  _validateFiles(newFiles, "normalize8BaseDocumentsDeleteAndUpdate:newFiles");
-  _validateReferences(oldFiles, "normalize8BaseDocumentsDeleteAndUpdate:oldFiles");
+  _validateFiles(newFiles, "normalize8baseDocumentsDeleteAndUpdate:newFiles");
+  _validateReferences(oldFiles, "normalize8baseDocumentsDeleteAndUpdate:oldFiles");
 
   const toBeDeleted: Record<string, string>[] = [];
   const toBeCreated: Record<string, string>[] = [];

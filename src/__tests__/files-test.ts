@@ -1,7 +1,7 @@
 import {
   normalize8baseDocumentCreate,
   normalize8baseDocumentDeleteAndUpdate,
-  normalize8baseDocumentsCreate, normalize8BaseDocumentsDeleteAndUpdate
+  normalize8baseDocumentsCreate, normalize8baseDocumentsDeleteAndUpdate
 } from "../files";
 import { ValidationError } from "../error/ValidationError";
 
@@ -227,107 +227,107 @@ test("normalize8baseDocumentDeleteAndUpdate:", () => {
 });
 
 
-test("normalize8BaseDocumentsDeleteAndUpdate:", () => {
-  expect(() => normalize8BaseDocumentsDeleteAndUpdate({}, "", {})).toThrowError(
-    new ValidationError(`normalize8BaseDocumentsDeleteAndUpdate:key: value: can't be blank, null or undefined.`)
+test("normalize8baseDocumentsDeleteAndUpdate:", () => {
+  expect(() => normalize8baseDocumentsDeleteAndUpdate({}, "", {})).toThrowError(
+    new ValidationError(`normalize8baseDocumentsDeleteAndUpdate:key: value: can't be blank, null or undefined.`)
   );
 
 
   const newO1 = { a: null };
   const oldO1 = { a: null };
-  normalize8BaseDocumentsDeleteAndUpdate(newO1, "a", oldO1);
+  normalize8baseDocumentsDeleteAndUpdate(newO1, "a", oldO1);
   expect(newO1).toEqual({});
 
   const newO2 = { a: undefined };
   const oldO2 = { a: undefined };
-  normalize8BaseDocumentsDeleteAndUpdate(newO2, "a", oldO2);
+  normalize8baseDocumentsDeleteAndUpdate(newO2, "a", oldO2);
   expect(newO2).toEqual({});
 
   // Bad old Files
   const newO3 = { a: null };
   const oldO3 = { a: 1 };
-  expect(() => normalize8BaseDocumentsDeleteAndUpdate(newO3, "a", oldO3)).toThrowError(
+  expect(() => normalize8baseDocumentsDeleteAndUpdate(newO3, "a", oldO3)).toThrowError(
     new ValidationError(
-      `normalize8BaseDocumentsDeleteAndUpdate:oldFiles: object is not a List.`
+      `normalize8baseDocumentsDeleteAndUpdate:oldFiles: object is not a List.`
     )
   );
 
   const newO4 = { a: null };
   const oldO4 = { a: "1" };
-  expect(() => normalize8BaseDocumentsDeleteAndUpdate(newO4, "a", oldO4)).toThrowError(
+  expect(() => normalize8baseDocumentsDeleteAndUpdate(newO4, "a", oldO4)).toThrowError(
     new ValidationError(
-      `normalize8BaseDocumentsDeleteAndUpdate:oldFiles: object is not a List.`
+      `normalize8baseDocumentsDeleteAndUpdate:oldFiles: object is not a List.`
     )
   );
 
   const newO5 = { a: null };
   const oldO5 = { a: {} };
-  expect(() => normalize8BaseDocumentsDeleteAndUpdate(newO5, "a", oldO5)).toThrowError(
+  expect(() => normalize8baseDocumentsDeleteAndUpdate(newO5, "a", oldO5)).toThrowError(
     new ValidationError(
-      `normalize8BaseDocumentsDeleteAndUpdate:oldFiles: object is not a List.`
+      `normalize8baseDocumentsDeleteAndUpdate:oldFiles: object is not a List.`
     )
   );
 
   const newO6 = { a: null };
   const oldO6 = { a: [] };
-  normalize8BaseDocumentsDeleteAndUpdate(newO6, "a", oldO6);
+  normalize8baseDocumentsDeleteAndUpdate(newO6, "a", oldO6);
   expect(newO6).toEqual({});
 
 
   const newO7 = { a: null };
   const oldO7 = { a: [{ id: null }] };
-  expect(() => normalize8BaseDocumentsDeleteAndUpdate(newO7, "a", oldO7)).toThrowError(
+  expect(() => normalize8baseDocumentsDeleteAndUpdate(newO7, "a", oldO7)).toThrowError(
     new ValidationError(
-      `normalize8BaseDocumentsDeleteAndUpdate:oldFiles: object is not a valid reference as it doesn't contain a valid id property.`
+      `normalize8baseDocumentsDeleteAndUpdate:oldFiles: object is not a valid reference as it doesn't contain a valid id property.`
     )
   );
 
   // Bad new files
   const newO8 = { a: 1 };
   const oldO8 = { a: [{ id: "FILE-ID" }] };
-  expect(() => normalize8BaseDocumentsDeleteAndUpdate(newO8, "a", oldO8)).toThrowError(
+  expect(() => normalize8baseDocumentsDeleteAndUpdate(newO8, "a", oldO8)).toThrowError(
     new ValidationError(
-      `normalize8BaseDocumentsDeleteAndUpdate:newFiles: object is not a List.`
+      `normalize8baseDocumentsDeleteAndUpdate:newFiles: object is not a List.`
     )
   );
 
   const newO9 = { a: {} };
   const oldO9 = { a: [{ id: "FILE-ID" }] };
-  expect(() => normalize8BaseDocumentsDeleteAndUpdate(newO9, "a", oldO9)).toThrowError(
+  expect(() => normalize8baseDocumentsDeleteAndUpdate(newO9, "a", oldO9)).toThrowError(
     new ValidationError(
-      `normalize8BaseDocumentsDeleteAndUpdate:newFiles: object is not a List.`
+      `normalize8baseDocumentsDeleteAndUpdate:newFiles: object is not a List.`
     )
   );
 
   const new10 = { a: [{ fileId: null }] };
   const old10 = { a: [{ id: "FILE-ID" }] };
-  expect(() => normalize8BaseDocumentsDeleteAndUpdate(new10, "a", old10)).toThrowError(
+  expect(() => normalize8baseDocumentsDeleteAndUpdate(new10, "a", old10)).toThrowError(
     new ValidationError(
-      `normalize8BaseDocumentsDeleteAndUpdate:newFiles: object is not a valid file as it doesn't contain a valid fileId property.`
+      `normalize8baseDocumentsDeleteAndUpdate:newFiles: object is not a valid file as it doesn't contain a valid fileId property.`
     )
   );
   //
   const new11 = { a: [{ fileId: undefined }] };
   const old11 = { a: [{ id: "FILE-ID" }] };
-  expect(() => normalize8BaseDocumentsDeleteAndUpdate(new11, "a", old11)).toThrowError(
+  expect(() => normalize8baseDocumentsDeleteAndUpdate(new11, "a", old11)).toThrowError(
     new ValidationError(
-      `normalize8BaseDocumentsDeleteAndUpdate:newFiles: object is not a valid file as it doesn't contain a valid fileId property.`
+      `normalize8baseDocumentsDeleteAndUpdate:newFiles: object is not a valid file as it doesn't contain a valid fileId property.`
     )
   );
   //
   const new12 = { a: [] };
   const old12 = { a: [] };
-  normalize8BaseDocumentsDeleteAndUpdate(new12, "a", old12);
+  normalize8baseDocumentsDeleteAndUpdate(new12, "a", old12);
   expect(new12).toEqual({});
 
   const new13 = { a: null };
   const old13 = { a: [{ id: "ID" }] };
-  normalize8BaseDocumentsDeleteAndUpdate(new13, "a", old13);
+  normalize8baseDocumentsDeleteAndUpdate(new13, "a", old13);
   expect(new13).toEqual({ a: { disconnect: [{ id: "ID" }] } });
 
   const new14 = { a: [{ fileId: "FILE-ID1", filename: "<FILENAME>" }] };
   const old14 = { a: [{ id: "FILE-ID2" }] };
-  normalize8BaseDocumentsDeleteAndUpdate(new14, "a", old14);
+  normalize8baseDocumentsDeleteAndUpdate(new14, "a", old14);
   expect(new14).toEqual({
     a: {
       create: [{ fileId: "FILE-ID1", filename: "<FILENAME>" }],
@@ -343,7 +343,7 @@ test("normalize8BaseDocumentsDeleteAndUpdate:", () => {
     }]
   };
   const old15 = { a: [{ id: "FILE-ID2" }, { id: "ID2" }] };
-  normalize8BaseDocumentsDeleteAndUpdate(new15, "a", old15);
+  normalize8baseDocumentsDeleteAndUpdate(new15, "a", old15);
   expect(new15).toEqual({
     a: {
       create: [{ fileId: "FILE-ID1", filename: "<FILENAME1>" }],
@@ -353,8 +353,8 @@ test("normalize8BaseDocumentsDeleteAndUpdate:", () => {
 
   const new16 = { a: [{ fileId: "FILE-ID1" }, { id: "ID2", fileId: "FILE-ID2", filename: "<FILENAME2>" }] };
   const old16 = { a: [{ id: "FILE-ID2" }, { id: "ID2" }] };
-  expect(() => normalize8BaseDocumentsDeleteAndUpdate(new16, "a", old16)).toThrowError(
-    new ValidationError(`normalize8BaseDocumentsDeleteAndUpdate:newFiles: object is not a valid file as it doesn't contain a valid filename property.`)
+  expect(() => normalize8baseDocumentsDeleteAndUpdate(new16, "a", old16)).toThrowError(
+    new ValidationError(`normalize8baseDocumentsDeleteAndUpdate:newFiles: object is not a valid file as it doesn't contain a valid filename property.`)
   );
 
 });

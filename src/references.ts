@@ -9,11 +9,11 @@ import {ValidationError} from "./error/ValidationError";
  * @param {object} data - The Object to be Mutated.
  * @param {string} key - The key in the Object.
  */
-export const normalize8BaseReferenceConnect = (
+export const normalize8baseReferenceConnect = (
     data: Record<string, any>,
     key: string,
 ) => {
-    _validateNullOrUndefinedOrBlank(key, 'normalize8BaseReferenceConnect:key');
+    _validateNullOrUndefinedOrBlank(key, 'normalize8baseReferenceConnect:key');
 
     const currentValue = data[key];
     if (currentValue === null || currentValue === '') {
@@ -36,7 +36,7 @@ export const normalize8BaseReferenceConnect = (
             currentId === ''
         ) {
             throw new ValidationError(
-                `normalize8BaseReferenceConnect: the value on data of the key: '${key}' is not a string, instead is: '${currentId}'`,
+                `normalize8baseReferenceConnect: the value on data of the key: '${key}' is not a string, instead is: '${currentId}'`,
             );
         }
         data[key] = {connect: {id: currentId}};
@@ -44,6 +44,6 @@ export const normalize8BaseReferenceConnect = (
     }
 
     throw new ValidationError(
-        `normalize8BaseReferenceConnect: '${key}' in data is not a 'string' or a 'object'.`,
+        `normalize8baseReferenceConnect: '${key}' in data is not a 'string' or a 'object'.`,
     );
 };
