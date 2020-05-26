@@ -81,25 +81,28 @@ export const _validateReferences = (objs: any, errorPrefix: string) => {
  */
 export function getMessageFromGraphQLError(error: Error) {
   const { message } = error;
+
+  const jsonStartIndex = message.indexOf(' {');
+  const jsonEndIndex = message.lastIndexOf('}') + 1;
+  const jsonBody = message.substring(jsonStartIndex, jsonEndIndex);
+
+  let jsonError;
   try {
-    const jsonStartIndex = message.indexOf(' {');
-    const jsonEndIndex = message.lastIndexOf('}') + 1;
-    const jsonBody = message.substring(jsonStartIndex, jsonEndIndex);
-
-    const jsonError = JSON.parse(jsonBody);
-    const { message: jsonMessage, raw } = jsonError;
-
-    if (jsonMessage) {
-      return jsonMessage;
-    }
-
-    if (raw && raw.message) {
-      return raw.message;
-    }
-    // Return original message.
-    return message;
-  } catch (e) {
+    jsonError = JSON.parse(jsonBody);
+   } catch (e) {
     console.error('getMessageFromGraphQLError Error: ', e);
     return message;
   }
-};
+
+  const { message: jsonMessage, raw } = jsonError;
+
+  if (jsonMessage) {
+    return jsonMessage;
+  }
+
+  if (raw && raw.message) {
+    return raw.message;
+  }
+  // Return original message.
+  return message;
+}
