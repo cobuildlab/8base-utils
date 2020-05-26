@@ -1,4 +1,3 @@
-export * from "./files";
-export * from "./references";
-export {_validateFile} from "./utils";
-export {_validateFiles} from "./utils";
+export * from './files';
+export * from './references';
+export { _validateFile, _validateFiles, getMessageFromGraphQLError } from './utils';
