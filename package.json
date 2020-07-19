@@ -44,14 +44,14 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "lint-staged"
+      "pre-commit": "npx lint-staged",
+      "pre-push:": "npm test"
     }
   },
   "lint-staged": {
     "*.js": [
       "prettier --write",
-      "tslint -p tsconfig.json --fix",
-      "git add"
+      "tslint -p tsconfig.json --fix"
     ]
   },
   "dependencies": {
