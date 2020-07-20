@@ -1,5 +1,6 @@
 import {
   normalize8baseDocumentCreate,
+  normalize8baseDocumentsCreateItems,
   normalize8baseDocumentDeleteAndUpdate,
   normalize8baseDocumentsCreate, normalize8baseDocumentsDeleteAndUpdate
 } from "../files";
@@ -120,6 +121,73 @@ test("normalize8baseDocumentsCreate:", () => {
   const o10 = { a: [{ fileId: "<ID>" }] };
   expect(() => normalize8baseDocumentsCreate(o10, "a")).toThrowError(
     new ValidationError(`normalize8baseDocumentsCreate:currentValues: object is not a valid file as it doesn't contain a valid filename property.`)
+  );
+
+});
+
+test("normalize8baseDocumentsCreateItems:", () => {
+  expect(() => normalize8baseDocumentsCreateItems({}, "")).toThrowError(
+    new ValidationError(`normalize8baseDocumentsCreateItems:key: value: can't be blank, null or undefined.`)
+  );
+
+  const o0 = { a: null };
+  normalize8baseDocumentsCreateItems(o0, "a");
+  expect(o0).toEqual({});
+
+  const o1 = { a: { items: null } };
+  normalize8baseDocumentsCreateItems(o1, "a");
+  expect(o1).toEqual({});
+
+  const o2 = { a: { items: undefined } };
+  normalize8baseDocumentsCreateItems(o2, "a");
+  expect(o2).toEqual({});
+
+  const o3 = { a: { items: 0 }};
+  expect(() => normalize8baseDocumentsCreateItems(o3, "a")).toThrowError(
+    new ValidationError(
+      `normalize8baseDocumentsCreateItems:currentValues: object is not a List.`
+    )
+  );
+
+  const o4 = { a: { items: "something" } };
+  expect(() => normalize8baseDocumentsCreateItems(o4, "a")).toThrowError(
+    new ValidationError(
+      `normalize8baseDocumentsCreateItems:currentValues: object is not a List.`
+    )
+  );
+
+  const o5 = { a: { items: [] } };
+  normalize8baseDocumentsCreateItems(o5, "a");
+  expect(o5).toEqual({});
+
+  const o6 = { a: {items: [{ id: null }]} };
+  expect(() => normalize8baseDocumentsCreateItems(o6, "a")).toThrowError(
+    new ValidationError(`normalize8baseDocumentsCreateItems:currentValues: object is not a valid file as it doesn't contain a valid fileId property.`)
+  );
+
+  const o7 = { a: {items: { fileId: null }} };
+  expect(() => normalize8baseDocumentsCreateItems(o7, "a")).toThrowError(
+    new ValidationError(`normalize8baseDocumentsCreateItems:currentValues: object is not a List.`)
+  );
+
+  const o8 = { a: {items: [{ fileId: "<ID>", filename: "<FILENAME>" }]} };
+  normalize8baseDocumentsCreateItems(o8, "a");
+  expect(o8).toEqual({ a: { create: [{ fileId: "<ID>", filename: "<FILENAME>" }] } });
+
+  const o9 = { a: {items: [{ fileId: "<ID1>", filename: "<FILENAME1>" }, { fileId: "<ID2>", filename: "<FILENAME2>" }]} };
+  normalize8baseDocumentsCreateItems(o9, "a");
+  expect(o9).toEqual({
+    a: {
+      create: [{ fileId: "<ID1>", filename: "<FILENAME1>" }, {
+        fileId: "<ID2>",
+        filename: "<FILENAME2>"
+      }]
+    }
+  });
+
+  const o10 = { a: {items: [{ fileId: "<ID>" }]} };
+  expect(() => normalize8baseDocumentsCreateItems(o10, "a")).toThrowError(
+    new ValidationError(`normalize8baseDocumentsCreateItems:currentValues: object is not a valid file as it doesn't contain a valid filename property.`)
   );
 
 });

@@ -70,6 +70,50 @@ export const normalize8baseDocumentsCreate = (
   data[key] = { create: documents };
 };
 
+/**
+ * Helper to change non null keys to 8base 'create' reference for files.
+ * // USE this for { items: [] } models.
+ *
+ * WARNING: This function mutates the data.
+ * WARNING: This functions assumes that all 8base keys are strings
+ * @param {object} data - The Object to be Mutated.
+ * @param {string} key - The key in the Object.
+ */
+export const normalize8baseDocumentsCreateItems = (
+  data: Record<string, any>,
+  key: string
+) => {
+  _validateNullOrUndefinedOrBlank(key, "normalize8baseDocumentsCreateItems:key");
+
+  const value = data[key]
+
+  if (isNullOrUndefined(value)) {
+    delete data[key];
+    return;
+  }
+
+  const currentValues = value.items;
+  if (isNullOrUndefined(currentValues)) {
+    delete data[key];
+    return;
+  }
+
+  _validateFiles(currentValues, "normalize8baseDocumentsCreateItems:currentValues");
+
+  if (currentValues.length === 0) {
+    delete data[key];
+    return;
+  }
+
+  const documents: Record<string, any>[] = [];
+  for (const file of currentValues) {
+    _validateFile(file, "normalize8baseDocumentsCreateItems:file.fileId");
+    documents.push({ fileId: file.fileId, filename: file.filename  });
+  }
+
+  data[key] = { create: documents };
+};
+
 
 /**
  * Helper to update or delete one document key from an Object.
