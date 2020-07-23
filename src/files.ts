@@ -140,6 +140,11 @@ export const normalize8baseDocumentDeleteAndUpdate = (data: Record<string, any>,
     return;
   }
 
+  if (newFile.id) {
+    delete data[key];
+    return;
+  }
+
   _validateFile(newFile, "normalize8baseDocumentDeleteAndUpdate:newFile");
 
   if (isNullOrUndefined(newFile.id)) {

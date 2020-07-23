@@ -292,6 +292,10 @@ test("normalize8baseDocumentDeleteAndUpdate:", () => {
     new ValidationError(`normalize8baseDocumentDeleteAndUpdate:newFile: object is not a valid file as it doesn't contain a valid filename property.`)
   );
 
+  const new14 = { a: { id: "FILE-ID" } };
+  const old14 = { a: { id: "FILE-ID" } };
+  normalize8baseDocumentDeleteAndUpdate(new14, "a", old14);
+  expect(new14).toEqual({});
 });
 
 
