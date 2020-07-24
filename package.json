@@ -8,7 +8,7 @@
     "test": "jest --collect-coverage",
     "build": "tsc",
     "format": "prettier --write \"src/**/*.ts\" \"src/**/*.js\"",
-    "lint": "tslint -p tsconfig.json"
+    "lint": "eslint --fix"
   },
   "files": [
     "lib/**/*"
@@ -32,14 +32,18 @@
     "@babel/preset-typescript": "^7.9.0",
     "@types/jest": "^25.2.1",
     "@types/node": "^13.13.5",
+    "@typescript-eslint/eslint-plugin": "^2.31.0",
+    "@typescript-eslint/parser": "^2.31.0",
     "babel-jest": "^26.0.1",
+    "eslint": "^7.0.0",
+    "eslint-config-prettier": "^6.11.0",
+    "eslint-plugin-jest": "^23.10.0",
+    "eslint-plugin-jsdoc": "^25.0.1",
     "husky": "^4.2.5",
     "jest": "^26.0.1",
     "lint-staged": "^10.2.2",
     "prettier": "^2.0.5",
     "ts-jest": "^25.5.1",
-    "tslint": "^6.1.2",
-    "tslint-config-prettier": "^1.18.0",
     "typescript": "^3.8.3"
   },
   "husky": {
@@ -49,9 +53,9 @@
     }
   },
   "lint-staged": {
-    "*.js": [
+    "*.{js,ts}": [
       "prettier --write",
-      "tslint -p tsconfig.json --fix"
+      "eslint --fix"
     ]
   },
   "dependencies": {
