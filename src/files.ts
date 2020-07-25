@@ -1,12 +1,13 @@
-import { isNullOrUndefined } from "@cobuildlab/validation-utils";
+import { isNullOrUndefined } from '@cobuildlab/validation-utils';
 import {
   _validateFile,
   _validateFiles,
   _validateNullOrUndefinedOrBlank,
   _validateReference,
-  _validateReferences
-} from "./utils";
+  _validateReferences,
+} from './utils';
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 /**
  * Helper to change non null keys to 8base 'create' reference for files.
@@ -19,9 +20,9 @@ import {
  */
 export const normalize8baseDocumentCreate = (
   data: Record<string, any>,
-  key: string
-) => {
-  _validateNullOrUndefinedOrBlank(key, "normalize8baseDocumentCreate:key");
+  key: string,
+): void => {
+  _validateNullOrUndefinedOrBlank(key, 'normalize8baseDocumentCreate:key');
 
   const currentValue = data[key];
   if (isNullOrUndefined(currentValue)) {
@@ -29,24 +30,25 @@ export const normalize8baseDocumentCreate = (
     return;
   }
 
-  _validateFile(currentValue, "normalize8baseDocumentCreate:currentValue");
-  data[key] = { create: { fileId: currentValue.fileId, filename: currentValue.filename } };
+  _validateFile(currentValue, 'normalize8baseDocumentCreate:currentValue');
+  data[key] = {
+    create: { fileId: currentValue.fileId, filename: currentValue.filename },
+  };
 };
-
 
 /**
  * Helper to change non null keys to 8base 'create' reference for files.
- *
  * WARNING: This function mutates the data.
- * WARNING: This functions assumes that all 8base keys are strings
+ * WARNING: This functions assumes that all 8base keys are strings.
+ *
  * @param {object} data - The Object to be Mutated.
  * @param {string} key - The key in the Object.
  */
 export const normalize8baseDocumentsCreate = (
   data: Record<string, any>,
-  key: string
-) => {
-  _validateNullOrUndefinedOrBlank(key, "normalize8baseDocumentsCreate:key");
+  key: string,
+): void => {
+  _validateNullOrUndefinedOrBlank(key, 'normalize8baseDocumentsCreate:key');
 
   const currentValues = data[key];
   if (isNullOrUndefined(currentValues)) {
@@ -54,7 +56,7 @@ export const normalize8baseDocumentsCreate = (
     return;
   }
 
-  _validateFiles(currentValues, "normalize8baseDocumentsCreate:currentValues");
+  _validateFiles(currentValues, 'normalize8baseDocumentsCreate:currentValues');
 
   if (currentValues.length === 0) {
     delete data[key];
@@ -63,8 +65,8 @@ export const normalize8baseDocumentsCreate = (
 
   const documents: Record<string, any>[] = [];
   for (const file of currentValues) {
-    _validateFile(file, "normalize8baseDocumentsCreate:file.fileId");
-    documents.push({ fileId: file.fileId, filename: file.filename  });
+    _validateFile(file, 'normalize8baseDocumentsCreate:file.fileId');
+    documents.push({ fileId: file.fileId, filename: file.filename });
   }
 
   data[key] = { create: documents };
@@ -73,19 +75,22 @@ export const normalize8baseDocumentsCreate = (
 /**
  * Helper to change non null keys to 8base 'create' reference for files.
  * // USE this for { items: [] } models.
- *
  * WARNING: This function mutates the data.
- * WARNING: This functions assumes that all 8base keys are strings
+ * WARNING: This functions assumes that all 8base keys are strings.
+ *
  * @param {object} data - The Object to be Mutated.
  * @param {string} key - The key in the Object.
  */
 export const normalize8baseDocumentsCreateItems = (
   data: Record<string, any>,
-  key: string
-) => {
-  _validateNullOrUndefinedOrBlank(key, "normalize8baseDocumentsCreateItems:key");
+  key: string,
+): void => {
+  _validateNullOrUndefinedOrBlank(
+    key,
+    'normalize8baseDocumentsCreateItems:key',
+  );
 
-  const value = data[key]
+  const value = data[key];
 
   if (isNullOrUndefined(value)) {
     delete data[key];
@@ -98,7 +103,10 @@ export const normalize8baseDocumentsCreateItems = (
     return;
   }
 
-  _validateFiles(currentValues, "normalize8baseDocumentsCreateItems:currentValues");
+  _validateFiles(
+    currentValues,
+    'normalize8baseDocumentsCreateItems:currentValues',
+  );
 
   if (currentValues.length === 0) {
     delete data[key];
@@ -107,13 +115,12 @@ export const normalize8baseDocumentsCreateItems = (
 
   const documents: Record<string, any>[] = [];
   for (const file of currentValues) {
-    _validateFile(file, "normalize8baseDocumentsCreateItems:file.fileId");
-    documents.push({ fileId: file.fileId, filename: file.filename  });
+    _validateFile(file, 'normalize8baseDocumentsCreateItems:file.fileId');
+    documents.push({ fileId: file.fileId, filename: file.filename });
   }
 
   data[key] = { create: documents };
 };
-
 
 /**
  * Helper to update or delete one document key from an Object.
@@ -123,9 +130,15 @@ export const normalize8baseDocumentsCreateItems = (
  * @param {string}key - Key object.
  * @param {object}originalData - Original object.
  */
-export const normalize8baseDocumentDeleteAndUpdate = (data: Record<string, any>,
-                                                      key: string, originalData: Record<string, any>) => {
-  _validateNullOrUndefinedOrBlank(key, "normalize8baseDocumentDeleteAndUpdate:key");
+export const normalize8baseDocumentDeleteAndUpdate = (
+  data: Record<string, any>,
+  key: string,
+  originalData: Record<string, any>,
+): void => {
+  _validateNullOrUndefinedOrBlank(
+    key,
+    'normalize8baseDocumentDeleteAndUpdate:key',
+  );
 
   const newFile = data[key];
   const oldFile = originalData[key];
@@ -134,7 +147,10 @@ export const normalize8baseDocumentDeleteAndUpdate = (data: Record<string, any>,
     if (isNullOrUndefined(oldFile)) {
       delete data[key];
     } else {
-      _validateReference(oldFile, "normalize8baseDocumentDeleteAndUpdate:oldFile");
+      _validateReference(
+        oldFile,
+        'normalize8baseDocumentDeleteAndUpdate:oldFile',
+      );
       data[key] = { disconnect: { id: oldFile.id } };
     }
     return;
@@ -145,16 +161,17 @@ export const normalize8baseDocumentDeleteAndUpdate = (data: Record<string, any>,
     return;
   }
 
-  _validateFile(newFile, "normalize8baseDocumentDeleteAndUpdate:newFile");
+  _validateFile(newFile, 'normalize8baseDocumentDeleteAndUpdate:newFile');
 
   if (isNullOrUndefined(newFile.id)) {
-    data[key] = { create: { fileId: newFile.fileId, filename: newFile.filename  } };
+    data[key] = {
+      create: { fileId: newFile.fileId, filename: newFile.filename },
+    };
     return;
   }
 
   delete data[key];
 };
-
 
 /**
  * Helper to change non null keys to 8base 'delete & create' reference for Documents Lists
@@ -164,9 +181,15 @@ export const normalize8baseDocumentDeleteAndUpdate = (data: Record<string, any>,
  * @param {string} key - The key of the property to mutate.
  * @param {Array} originalData - The documents originals.
  */
-export const normalize8baseDocumentsDeleteAndUpdate = (data: Record<string, any>, key: string, originalData: Record<string, any>) => {
-
-  _validateNullOrUndefinedOrBlank(key, "normalize8baseDocumentsDeleteAndUpdate:key");
+export const normalize8baseDocumentsDeleteAndUpdate = (
+  data: Record<string, any>,
+  key: string,
+  originalData: Record<string, any>,
+): void => {
+  _validateNullOrUndefinedOrBlank(
+    key,
+    'normalize8baseDocumentsDeleteAndUpdate:key',
+  );
 
   const newFiles = data[key];
   const oldFiles = originalData[key];
@@ -175,34 +198,37 @@ export const normalize8baseDocumentsDeleteAndUpdate = (data: Record<string, any>
     if (isNullOrUndefined(oldFiles)) {
       delete data[key];
     } else {
-      _validateReferences(oldFiles, "normalize8baseDocumentsDeleteAndUpdate:oldFiles");
-      if (oldFiles.length === 0)
-        delete data[key];
+      _validateReferences(
+        oldFiles,
+        'normalize8baseDocumentsDeleteAndUpdate:oldFiles',
+      );
+      if (oldFiles.length === 0) delete data[key];
       else
         data[key] = {
           disconnect: oldFiles.map((file: Record<string, string>) => {
             return { id: file.id };
-          })
+          }),
         };
     }
     return;
   }
 
-  _validateFiles(newFiles, "normalize8baseDocumentsDeleteAndUpdate:newFiles");
-  _validateReferences(oldFiles, "normalize8baseDocumentsDeleteAndUpdate:oldFiles");
+  _validateFiles(newFiles, 'normalize8baseDocumentsDeleteAndUpdate:newFiles');
+  _validateReferences(
+    oldFiles,
+    'normalize8baseDocumentsDeleteAndUpdate:oldFiles',
+  );
 
   const toBeDeleted: Record<string, string>[] = [];
   const toBeCreated: Record<string, string>[] = [];
 
   newFiles.forEach((file: Record<string, string>) => {
-    if (file.id === undefined)
-      toBeCreated.push(file);
+    if (file.id === undefined) toBeCreated.push(file);
   });
 
   oldFiles.forEach((oldFile: Record<string, string>) => {
     for (const newFile of newFiles) {
-      if (newFile.id === oldFile.id)
-        return;
+      if (newFile.id === oldFile.id) return;
     }
     toBeDeleted.push(oldFile);
   });
@@ -214,12 +240,11 @@ export const normalize8baseDocumentsDeleteAndUpdate = (data: Record<string, any>
 
   data[key] = {};
   if (toBeCreated.length > 0)
-    data[key].create = toBeCreated.map(file => {
-      return { fileId: file.fileId, filename: file.filename  };
+    data[key].create = toBeCreated.map((file) => {
+      return { fileId: file.fileId, filename: file.filename };
     });
   if (toBeDeleted.length > 0)
-    data[key].disconnect = toBeDeleted.map(file => {
+    data[key].disconnect = toBeDeleted.map((file) => {
       return { id: file.id };
     });
-
 };
