@@ -59,3 +59,25 @@ test('normalize8baseReferenceConnect:', () => {
     ),
   );
 });
+
+test('normalize8baseReferenceUpdate:', () => {
+  expect(() => normalize8baseReferenceUpdate({}, '')).toThrowError(
+    new ValidationError(
+      `normalize8baseReferenceUpdate:key: value: can't be blank, null or undefined.`,
+    ),
+  );
+
+  const o1 = { a: null };
+  normalize8baseReferenceUpdate(o1, 'a');
+  expect(o1).toMatchObject({});
+
+  const o2 = { a: '' };
+  normalize8baseReferenceUpdate(o2, 'a');
+  expect(o1).toMatchObject({});
+
+  const o3 = { a: '<ID>' };
+  normalize8baseReferenceUpdate(o3, 'a');
+  expect(o3).toMatchObject({ update: { a: '<ID>' } });
+
+
+});

@@ -37,33 +37,6 @@ export const normalize8baseDocumentCreate = (
 };
 
 /**
- * Helper to change non null keys to 8base 'update' reference for files.
- * If the value of the key is undefined or null, the property gets deleted from the object.
- * WARNING: This function mutates the data.
- * WARNING: This functions assumes that all 8base keys are strings.
- *
- * @param {object} data - The Object to be Mutated.
- * @param {string} key - The key in the Object.
- */
-export const normalize8baseDocumentUpdate = (
-  data: Record<string, any>,
-  key: string,
-): void => {
-  _validateNullOrUndefinedOrBlank(key, 'normalize8baseDocumentUpdate:key');
-
-  const currentValue = data[key];
-  if (isNullOrUndefined(currentValue)) {
-    delete data[key];
-    return;
-  }
-
-  _validateFile(currentValue, 'normalize8baseDocumentUpdate:currentValue');
-  data[key] = {
-    update: { ...currentValue },
-  };
-};
-
-/**
  * Helper to change non null keys to 8base 'create' reference for files.
  * WARNING: This function mutates the data.
  * WARNING: This functions assumes that all 8base keys are strings.
