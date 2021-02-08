@@ -11,14 +11,14 @@ This is a package for functions that are use full in common cases of working wit
 
 | Function   | Description   | 
 | ------ | ------ | 
-| [`normalize8baseReference`](#normalize8baseReference) | Updates an object to change a property with a 8base `connect` operation. | 
+| [`normalize8baseReferenceConnect`](#normalize8baseReferenceConnect) | Updates an object to change a property with a 8base `connect` operation. | 
 | [`normalize8baseDocumentCreate`](#normalize8baseDocumentCreate) | Updates an object to change a property with a 8base `create` operation for a file object. | 
 | [`normalize8baseDocumentsCreate`](#normalize8baseDocumentsCreate) | Updates an object to change a property with a 8base `create` operation for a list of files objects. | 
 | [`normalize8baseDocumentDeleteAndUpdate`](#normalize8baseDocumentDeleteAndUpdate) | Updates an object to change a property with a 8base `create` and/or `disconnect` operation for a list of files objects. | 
 | [`normalize8baseDocumentsDeleteAndUpdate`](#normalize8baseDocumentsDeleteAndUpdate) | Updates an object to change a property with a 8base `create` and/or `disconnect` operation for a list of files objects. | 
 
 
-### `normalize8baseReference(data, key)`
+### `normalize8baseReferenceConnect(data, key)`
 
 - Updates an object to change a property with a 8base `connect` operation.
 - If the value of the key is undefined or null, the property gets deleted from the object.
@@ -29,11 +29,11 @@ Example:
 
 
 ```javascript
-import {normalize8baseReference} from "@cobuildlab/8base-utils";
+import {normalize8baseReferenceConnect} from "@cobuildlab/8base-utils";
 
 const issue = {name :"Issues Name", project: "<Project ID>"   };
 
-normalize8baseReference(issue, "project");
+normalize8baseReferenceConnect(issue, "project");
 
 console.log(issue);
 // {name :"Issues Name", project: {connect:{id: "<Project ID>"}}};
