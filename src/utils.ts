@@ -1,5 +1,6 @@
 import { isNullOrUndefined } from '@cobuildlab/validation-utils';
 import { ValidationError } from './error/ValidationError';
+import { ResponseBody } from './types';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
@@ -126,3 +127,49 @@ export function getMessageFromGraphQLError(error: Error): string {
   // Return original message.
   return message;
 }
+
+/**
+ * Http response builder.
+ *
+ * @param code - Http status code.
+ * @param message - Message to response.
+ * @param headers - Http headers.
+ * @returns Response object.
+ */
+export const responseBuilder = (
+  code = 200,
+  message?: string,
+  headers?: Record<string, unknown>,
+): ResponseBody => {
+  const bodyData = typeof message === 'string' ? { message } : message;
+
+  return {
+    body: JSON.stringify(bodyData),
+    statusCode: code,
+    headers: headers ?? {},
+  };
+};
+
+/**
+ * Checks that the current environment is the one given.
+ *
+ * @param env - The environment in which code is running, production|development|test.
+ *
+ * @returns Result of comparing the equality between the given env and the current NODE_ENV.
+ */
+export const isEnvironment = (env: string): boolean =>
+  process.env.NODE_ENV === env;
+
+/**
+ * Logs the error in Cloud Function.
+ *
+ * @param title - Title of the error to.
+ * @param err - The error object thrown.
+ * @param data - Data to identify the function state in the moment of the error.
+ */
+export const report = (title: string, err: Error, data = {}): void => {
+  console.log(title);
+  console.log(JSON.stringify(data, null, 2));
+  console.log(JSON.stringify(err));
+  console.log(err.message);
+};
