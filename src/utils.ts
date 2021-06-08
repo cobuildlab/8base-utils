@@ -142,6 +142,7 @@ export const responseBuilder = (
   headers?: Record<string, unknown>,
 ): ResponseBody => {
   const bodyData = typeof message === 'string' ? { message } : message;
+  console.log(JSON.stringify(bodyData, null, 2));
 
   return {
     body: JSON.stringify(bodyData),
