@@ -138,7 +138,7 @@ export function getMessageFromGraphQLError(error: Error): string {
  */
 export const responseBuilder = (
   code = 200,
-  message?: string,
+  message?: string | Record<string, unknown>,
   headers?: Record<string, unknown>,
 ): ResponseBody => {
   const bodyData = typeof message === 'string' ? { message } : message;
