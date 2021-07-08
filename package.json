@@ -59,6 +59,6 @@
     ]
   },
   "dependencies": {
-    "@cobuildlab/validation-utils": "0.0.2"
+    "@cobuildlab/validation-utils": "0.0.5"
   }
 }
